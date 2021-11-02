@@ -4,6 +4,11 @@ import numpy as np
 widthImg = 640
 heightImg = 480
 
+# TODO: Create a popup for user to enter the ipaddress.
+# This way you dont have to hard code the ip adress and
+# the user can enter whatever the address they want.
+# Makes it a bit more general.
+
 url = 'http://192.168.0.101:8080/video'
 
 cap = cv2.VideoCapture(url)
