@@ -4,14 +4,14 @@ import numpy as np
 frameheight = 640
 framewidth = 480
 
-# Add your custom path here
-# where the video you want is stored.
-url = '/home/aftaab/8DayPlan/UniProjects/DocumentScanner/test_video.mp4'
+url = 'http://192.168.0.101:8080/video'
 
-cap = cv2.VideoCapture(url)
+cap = cv2.VideoCapture('/home/aftaab/8DayPlan/UniProjects/DocumentScanner/docscan_vid.mp4')
 cap.set(3, 640)
 cap.set(4, 480)
 cap.set(10, 150)
+
+
 
 def preProcessing(img):
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -28,14 +28,14 @@ def getContours(img):
     contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     for cnt in contours:
         area = cv2.contourArea(cnt)
-
-        if area > 5000:
-            cv2.drawContours(imgContour, cnt, -1, (255, 0, 0), 20)
-            peri = cv2.arcLength(cnt, True)
-            approx = cv2.approxPolyDP(cnt, 0.02*peri, True)
-            if area > maxArea and len(approx) == 4:
-                biggest = approx
-                maxArea = area
+        print(area)
+        #if area > 5000:
+        cv2.drawContours(imgContour, cnt, -1, (255, 0, 0), 20)
+        peri = cv2.arcLength(cnt, True)
+        approx = cv2.approxPolyDP(cnt, 0.02*peri, True)
+        if area > maxArea and len(approx) == 4:
+            biggest = approx
+            maxArea = area
     
     return biggest
 
@@ -111,11 +111,11 @@ while True:
     imgThres = preProcessing(img)
     biggest = getContours(imgThres)
 
-    if biggest.size != 0:
-        imgWarped = getWarp(img, biggest)
-        imageArray = ([img, imgThres], [imgContour, imgWarped])
-    else:
-        imageArray = ([img, imgThres], [img, img])
+    #if biggest.size != 0:
+    imgWarped = getWarp(img, biggest)
+    imageArray = ([img, imgThres], [imgContour, imgWarped])
+    #else:
+    #imageArray = ([img, imgThres], [img, img])
         
 
     stackedImages = stackImages(0.6, imageArray)
